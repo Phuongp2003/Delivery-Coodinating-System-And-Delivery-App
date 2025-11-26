@@ -4,6 +4,10 @@
 
 FROM node:20-alpine AS builder
 
+# Label for GitHub Container Registry auto-linking
+ARG GITHUB_REPOSITORY
+LABEL org.opencontainers.image.source=https://github.com/${GITHUB_REPOSITORY}
+
 WORKDIR /app
 
 # Copy package files
@@ -21,14 +25,13 @@ COPY index.html ./
 COPY env.d.ts ./
 
 # Build application with environment variables
-ARG VITE_API_URL=http://localhost:8080/api
-ARG VITE_WS_URL=http://localhost:8080/api/ws
+# Note: API keys are fetched from backend at runtime, not baked into build
+ARG VITE_API_URL=/api
+ARG VITE_WS_URL=/api/ws
 ARG VITE_ENV=production
-ARG VITE_MAPTILER_API_KEY=
 ENV VITE_API_URL=$VITE_API_URL
 ENV VITE_WS_URL=$VITE_WS_URL
 ENV VITE_ENV=$VITE_ENV
-ENV VITE_MAPTILER_API_KEY=$VITE_MAPTILER_API_KEY
 
 # Build the application (outputs to /app/dist)
 RUN npm run build-only
