@@ -55,7 +55,7 @@ jobs:
           VITE_MAPTILER_API_KEY: ""
         run: |
           # Build with base path for GitHub Pages (repository name as subpath)
-          npm run build-only -- --base=/
+          npm run build-only -- --base=/${{ github.event.repository.name }}/
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
